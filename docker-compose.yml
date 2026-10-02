@@ -1,0 +1,28 @@
+name: cuarto-servidores
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: cuarto_servidores_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?Define DB_ROOT_PASSWORD en el archivo .env}
+      MYSQL_DATABASE: ${DB_NAME:?Define DB_NAME en el archivo .env}
+      MYSQL_USER: ${DB_USER:?Define DB_USER en el archivo .env}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?Define DB_PASSWORD en el archivo .env}
+    ports:
+      # Solo accesible desde tu propia computadora (no desde la red)
+      - "127.0.0.1:${DB_PORT:-3307}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      # Los .sql de esta carpeta se ejecutan SOLO la primera vez que se crea el volumen
+      - ./database:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+volumes:
+  mysql_data:
