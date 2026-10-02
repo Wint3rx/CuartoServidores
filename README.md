@@ -2,8 +2,6 @@
 
 Un sistema de monitoreo en tiempo real diseñado para entornos de misión crítica (cuartos de servidores y data centers). Proporciona control de acceso biométrico estricto, monitoreo de temperatura en tiempo real y análisis predictivo para la prevención de riesgos térmicos.
 
-![SysAdmin Pro Mockup](https://raw.githubusercontent.com/TuUsuario/TuRepositorio/main/docs/preview.png) *(Puedes agregar una captura de pantalla aquí posteriormente)*
-
 ## Características Principales
 
 ### Módulo de Seguridad y Accesos
