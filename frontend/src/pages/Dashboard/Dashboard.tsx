@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { LayoutDashboard, Users, AlertTriangle, Thermometer, Activity, Info, X, LineChart, Server, ThermometerSnowflake } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
@@ -14,12 +15,13 @@ const mockPredictiveData = [
 
 export const Dashboard = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [showPredictionInfo, setShowPredictionInfo] = useState(false);
 
   const statCards = [
-    { title: 'Temperatura Actual', value: '25°C', icon: <Thermometer size={24} className="text-blue-500" />, color: 'bg-blue-50', border: 'border-blue-100' },
-    { title: 'Accesos Hoy', value: '14', icon: <Users size={24} className="text-emerald-500" />, color: 'bg-emerald-50', border: 'border-emerald-100' },
-    { title: 'Alertas Activas', value: '2', icon: <AlertTriangle size={24} className="text-red-500" />, color: 'bg-red-50', border: 'border-red-100' },
+    { title: 'Temperatura Actual', value: '25°C', icon: <Thermometer size={24} className="text-blue-500" />, color: 'bg-blue-50', border: 'border-blue-100', route: '/temperature' },
+    { title: 'Accesos Hoy', value: '14', icon: <Users size={24} className="text-emerald-500" />, color: 'bg-emerald-50', border: 'border-emerald-100', route: '/access-logs' },
+    { title: 'Alertas Activas', value: '2', icon: <AlertTriangle size={24} className="text-red-500" />, color: 'bg-red-50', border: 'border-red-100', route: '#' },
   ];
 
   return (
@@ -35,7 +37,11 @@ export const Dashboard = () => {
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {statCards.map((card, idx) => (
-          <div key={idx} className={`p-5 sm:p-6 rounded-2xl border ${card.border} ${card.color} shadow-sm flex items-center space-x-4 transition-transform hover:-translate-y-1 duration-300`}>
+          <div 
+            key={idx} 
+            onClick={() => card.route !== '#' && navigate(card.route)}
+            className={`p-5 sm:p-6 rounded-2xl border ${card.border} ${card.color} shadow-sm flex items-center space-x-4 transition-transform hover:-translate-y-1 duration-300 ${card.route !== '#' ? 'cursor-pointer hover:shadow-md' : ''}`}
+          >
             <div className="p-3 bg-white/80 backdrop-blur-sm rounded-xl shadow-sm shrink-0">
               {card.icon}
             </div>

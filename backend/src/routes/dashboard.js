@@ -42,6 +42,31 @@ router.get('/temperatura', async (req, res) => {
   }
 });
 
+router.get('/temperatura-detallada', async (req, res) => {
+  try {
+    // Agrupa por día, y luego por intervalos de 30 minutos
+    const [por30Min] = await pool.query(
+      `SELECT 
+         DATE(fecha_hora) as fecha,
+         HOUR(fecha_hora) as hora,
+         FLOOR(MINUTE(fecha_hora) / 30) * 30 as minuto,
+         ROUND(AVG(temperatura), 1) as temp_promedio,
+         ROUND(MIN(temperatura), 1) as temp_min,
+         ROUND(MAX(temperatura), 1) as temp_max,
+         COUNT(*) as lecturas
+       FROM lecturas
+       WHERE fecha_hora >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+       GROUP BY DATE(fecha_hora), HOUR(fecha_hora), FLOOR(MINUTE(fecha_hora) / 30)
+       ORDER BY fecha DESC, hora DESC, minuto DESC`
+    );
+
+    res.json({ por30Min });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
 router.get('/resumen', async (req, res) => {
   try {
     const [tempActual] = await pool.query(
