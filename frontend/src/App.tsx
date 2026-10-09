@@ -34,7 +34,7 @@ const Layout = () => {
           </div>
           {user && (
             <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-sm">
-              {user.username.charAt(0).toUpperCase()}
+              {(user.username || user.nombre || 'A').charAt(0).toUpperCase()}
             </div>
           )}
         </header>

@@ -1,9 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-interface AuthUser {
-  id: string;
-  username: string;
-  role: 'admin';
+export interface AuthUser {
+  id: string | number;
+  username?: string;
+  nombre?: string;
+  email?: string;
+  role?: string;
+  rol?: string;
 }
 
 interface AuthContextType {
@@ -26,8 +29,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const storedToken = localStorage.getItem('jwt_token');
     const storedUser = localStorage.getItem('user_data');
     if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(JSON.parse(storedUser));
+      if (storedToken.startsWith('dummy_')) {
+        localStorage.removeItem('jwt_token');
+        localStorage.removeItem('user_data');
+      } else {
+        setToken(storedToken);
+        setUser(JSON.parse(storedUser));
+      }
     }
     setLoading(false);
   }, []);

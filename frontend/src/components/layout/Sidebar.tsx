@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { LayoutDashboard, Thermometer, Users, LogOut, X, Server } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';

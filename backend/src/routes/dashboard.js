@@ -56,7 +56,7 @@ router.get('/temperatura-detallada', async (req, res) => {
          COUNT(*) as lecturas
        FROM lecturas
        WHERE fecha_hora >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-       GROUP BY DATE(fecha_hora), HOUR(fecha_hora), FLOOR(MINUTE(fecha_hora) / 30)
+       GROUP BY DATE(fecha_hora), HOUR(fecha_hora), FLOOR(MINUTE(fecha_hora) / 30) * 30
        ORDER BY fecha DESC, hora DESC, minuto DESC`
     );
 
